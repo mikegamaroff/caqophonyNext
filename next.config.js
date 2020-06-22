@@ -2,7 +2,7 @@
 const withCSS = require("@zeit/next-css");
 
 module.exports = withCSS({
-  distDir: "next",
+  distDir: ".next",
   cssLoaderOptions: {
     url: false,
   },

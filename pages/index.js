@@ -3,7 +3,7 @@ import Aos from "aos";
 import { Input, Button, Textarea } from "../pattern/forms/Fields";
 import axios from "axios";
 import { gsap, CSSPlugin, TweenLite, Power4 } from "gsap";
-
+import Head from "next/head";
 gsap.registerPlugin(CSSPlugin);
 let slideNum;
 
@@ -159,9 +159,41 @@ class Home extends Component {
   render() {
     const { errors } = this.state;
     const { classes } = this.props;
+    const title =
+      "Caqophony - Brand activation, crypto apps, smart contracts and web applications";
+    const description =
+      "Consumers enjoy being challenged, entertained, enticed, helped, educated and enthralled. It’s the only way to forge meaningful relationships that last beyond the click. Harness the power of cutting edge digital engagement applications integrating with blockchain and crypto technology for a wide variety of benefits, such as contests, challenges, Mini-games, Incentives, sampling, couponing, location-based, social apps, rich media, mobile experiential, Bitcoin payment apps, rewards and incentivization, virtual currency, tokens, digital collectibles, wallets, invoicing, statements, fintech, digital rights management, fractional commodities, data privacy, deeds, supply chain management, identity, gaming, tokenization, utilities, business tools, e-learning, platforms ,social networking, communication, online stores, multimedia, UX/UI, full-stack development and rsponsive web sites.";
+    const sitename = "Caqophony";
+    const siteurl = "http://cacophony.com";
+    const summary =
+      "Consumers enjoy being challenged, entertained, enticed, helped, educated and enthralled. It’s the only way to forge meaningful relationships that last beyond the click.";
 
     return (
       <div>
+        <Head>
+          <title>{title}</title>
+          <meta name="description" content={description} />
+          <meta property="og:type" content="website" />
+          <meta name="og:title" property="og:title" content={title} />
+          <meta
+            name="og:description"
+            property="og:description"
+            content={description}
+          />
+          <meta property="og:site_name" content={sitename} />
+          <meta property="og:url" content={siteurl} />
+          <meta name="twitter:card" content={summary} />
+          <meta name="twitter:title" content={title} />
+          <meta name="twitter:description" content={description} />
+          <meta name="twitter:site" content={siteurl} />
+          <meta name="twitter:creator" content={sitename} />
+          <link rel="icon" type="image/png" href="favicon.ico" />
+          <link rel="apple-touch-icon" href="favicon.ico" />
+          <link rel="stylesheet" href="" />
+          <meta property="og:image" content="/images/mainLogo.svg" />
+          <meta name="twitter:image" content="/images/mainLogo.svg" />
+          <link rel="canonical" href={siteurl} />
+        </Head>
         <section className="blackback" id="plain">
           <div className="header">
             <div>
