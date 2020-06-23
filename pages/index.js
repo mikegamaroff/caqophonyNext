@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import Aos from "aos";
 import { Input, Button, Textarea } from "../pattern/forms/Fields";
-import axios from "axios";
+import fetch from "isomorphic-unfetch";
 import { gsap, CSSPlugin, TweenLite, Power4 } from "gsap";
 import Head from "next/head";
+
 gsap.registerPlugin(CSSPlugin);
 let slideNum;
 
@@ -94,6 +95,7 @@ class Home extends Component {
   };
 
   slideChange = () => {
+    /*     console.log(process.env.USER); */
     TweenLite.fromTo(
       document.getElementById("topslide"),
       2,
@@ -116,6 +118,7 @@ class Home extends Component {
   }
   componentDidMount() {
     this._mounted = true;
+
     /* axios
       .get("https://us-central1-mikegamaroff-8ec96.cloudfunctions.net/getNews")
       .then((res) => {
@@ -136,10 +139,42 @@ class Home extends Component {
       [e.target.name]: e.target.value,
     });
   };
+
+  getMail = async (state) => {
+    /*     fetch("http://localhost:3000/api/mail").then((r) => {
+      console.log(r.json());
+    }); */
+    const req = await fetch("/api/send", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: state.email,
+        name: state.name,
+        key: "(EN]KP}pzz]avzqE96XnW?AtuZju9",
+        message: state.message,
+      }),
+    });
+    const result = await req;
+    if (result.ok) {
+      console.log(result);
+      this.setState({ sent: "sent" });
+    } else {
+      this.setState({ sent: "failed" });
+    }
+
+    // const data = await res;
+    //console.log(data);
+    //  return data;
+  };
   handleSubmit = (e) => {
     this.setState({ sending: "Sending...", errors: {} });
     e.preventDefault();
-    axios
+
+    this.getMail(this.state);
+
+    /* axios
       .post(
         "https://us-central1-mikegamaroff-8ec96.cloudfunctions.net/sendEmail",
         this.state
@@ -152,8 +187,7 @@ class Home extends Component {
         console.log(err);
         //  this.setState({ sending: false, errors: err.response.data });
         //  console.log(err.response.data);
-      });
-    console.log(this.state);
+      }); */
   };
 
   render() {
@@ -164,7 +198,7 @@ class Home extends Component {
     const description =
       "Consumers enjoy being challenged, entertained, enticed, helped, educated and enthralled. It’s the only way to forge meaningful relationships that last beyond the click. Harness the power of cutting edge digital engagement applications integrating with blockchain and crypto technology for a wide variety of benefits, such as contests, challenges, Mini-games, Incentives, sampling, couponing, location-based, social apps, rich media, mobile experiential, Bitcoin payment apps, rewards and incentivization, virtual currency, tokens, digital collectibles, wallets, invoicing, statements, fintech, digital rights management, fractional commodities, data privacy, deeds, supply chain management, identity, gaming, tokenization, utilities, business tools, e-learning, platforms ,social networking, communication, online stores, multimedia, UX/UI, full-stack development and rsponsive web sites.";
     const sitename = "Caqophony";
-    const siteurl = "http://cacophony.com";
+    const siteurl = "http://caqophony.com";
     const summary =
       "Consumers enjoy being challenged, entertained, enticed, helped, educated and enthralled. It’s the only way to forge meaningful relationships that last beyond the click.";
 
@@ -187,18 +221,31 @@ class Home extends Component {
           <meta name="twitter:description" content={description} />
           <meta name="twitter:site" content={siteurl} />
           <meta name="twitter:creator" content={sitename} />
-          <link rel="icon" type="image/png" href="favicon.ico" />
-          <link rel="apple-touch-icon" href="favicon.ico" />
+          <link
+            rel="icon"
+            type="image/png"
+            href="https://caqophony.com/favicon.ico"
+          />
+          <link
+            rel="apple-touch-icon"
+            href="https://caqophony.com/favicon.ico"
+          />
           <link rel="stylesheet" href="" />
-          <meta property="og:image" content="/images/mainLogo.svg" />
-          <meta name="twitter:image" content="/images/mainLogo.svg" />
+          <meta
+            property="og:image"
+            content="https://caqophony.com/images/mainLogo.svg"
+          />
+          <meta
+            name="twitter:image"
+            content="https://caqophony.com/images/mainLogo.svg"
+          />
           <link rel="canonical" href={siteurl} />
         </Head>
         <section className="blackback" id="plain">
           <div className="header">
             <div>
               <div className="headerImage">
-                <img src="/images/mainLogo.svg" />
+                <img src="https://caqophony.com/images/mainLogo.svg" />
               </div>
               <div className="mainTitles">
                 <h2
@@ -494,16 +541,43 @@ class Home extends Component {
                     autoComplete="off"
                     gap="20px"
                   />
-                  <Button
-                    label="Submit"
-                    submitting={this.state.sending}
-                    fullwidth={false}
-                    color="white"
-                    disabled={false}
-                    onClick={this.handleSubmit}
-                    gradient={["#139af3", "#ef0a7e"]}
-                    gap="20px"
-                  />
+
+                  {!this.state.sent ? (
+                    <Button
+                      label="Submit"
+                      submitting={this.state.sending}
+                      fullwidth={false}
+                      color="white"
+                      disabled={false}
+                      onClick={this.handleSubmit}
+                      gradient={["#139af3", "#ef0a7e"]}
+                      gap="20px"
+                    />
+                  ) : null}
+                  {this.state.sent == "sent" ? (
+                    <div className="thankyouMessage" id="success">
+                      <img src="/images/copyComplete.gif" />
+                      <div>
+                        Thank you for your message.
+                        <br />
+                        We'll be in touch shortly.
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {this.state.sent == "failed" ? (
+                    <div className="thankyouMessage" id="error">
+                      <div>
+                        Sorry, there appears to have been an issue sending.
+                        <br />
+                        Please email{" "}
+                        <a href="mailto:mike@caqophony.com">
+                          mike@caqophony.com
+                        </a>
+                        .
+                      </div>
+                    </div>
+                  ) : null}
                 </form>
               </div>
               <div className="basedInContainer">
