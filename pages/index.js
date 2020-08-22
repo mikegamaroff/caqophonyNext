@@ -68,7 +68,7 @@ class Home extends Component {
   };
 
   newSlideFlip = () => {
-    slideNum = Math.floor(Math.random() * 31);
+    slideNum = Math.floor(Math.random() * 10);
     if (this._mounted) {
       this.setState(
         { bottomslide: slideNum, currentlyLoading: "first" },
@@ -144,7 +144,7 @@ class Home extends Component {
     /*     fetch("http://localhost:3000/api/mail").then((r) => {
       console.log(r.json());
     }); */
-    const req = await fetch("/api/send", {
+    const req = await fetch("/api/mail", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -157,8 +157,8 @@ class Home extends Component {
       }),
     });
     const result = await req;
+
     if (result.ok) {
-      console.log(result);
       this.setState({ sent: "sent" });
     } else {
       this.setState({ sent: "failed" });
@@ -508,7 +508,7 @@ class Home extends Component {
                 <p id="shortp">Send us a note to get in touch.</p>
                 <form>
                   <Input
-                    placeholder="Name"
+                    placeholder="Your name"
                     name="name"
                     color="white"
                     type="text"
